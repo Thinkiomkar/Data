@@ -1,10 +1,16 @@
-from flask import Flask, jsonify
+from flask import Flask
+from plotly import tools
+import plotly.offline as py
+import plotly.graph_objs as go
 import pyodbc
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.subplots as sp
-import plotly.utils
-import json
+
+
+import plotly.express as px
+from plotly.subplots import make_subplots
+
 
 server = 'ttplsqleu.database.windows.net'
 database = 'rms_live'
@@ -35,20 +41,19 @@ def main():
     conn.close()
 
     # Create visualizations using plotly
-    fig = sp.make_subplots(rows=5, cols=1, vertical_spacing=0.5, subplot_titles=(
-        'Leads and Sources Relationship',
+    fig = sp.make_subplots(rows=6, cols=1, vertical_spacing=0.08, subplot_titles=(
         'Leads From Sources',
         'Leads Status',
         'Leads Counts and Status',
         'Leads Counts and Status'
     ))
 
-    top_40 = df.nlargest(40, 'com_firstname_numeric')
+    # top_40 = df.nlargest(40, 'com_firstname_numeric')
 
-    fig.add_trace(
-        go.Scatter(x=top_40['com_firstname'], y=top_40['COL_ContactLabel'], mode='markers'),
-        row=1, col=1
-    )
+    # fig.add_trace(
+    #     go.Scatter(x=top_40['com_firstname'], y=top_40['COL_ContactLabel'], mode='markers'),
+    #     row=1, col=1
+    # )
 
     fig.add_trace(
         go.Histogram(x=df['COL_ContactLabel']),
@@ -60,23 +65,58 @@ def main():
         row=3, col=1
     )
 
-    fig.add_trace(
-        go.Bar(x=df['COL_ContactLabel'], y=df['ls_description'], barmode='stack'),
-        row=4, col=1
-    )
+    # fig.add_trace(
+    #     go.Bar(x=df['COL_ContactLabel'], y=df['ls_description']),
+    #     row=4, col=1
+    # )
+
+    colors = {
+    'Category1': 'blue',
+    'Category2': 'green',
+    'Category3': 'red',
+    # Add more categories and colors as needed
+     }
 
     fig.add_trace(
-        go.Histogram(y=df['COL_ContactLabel'], histfunc='count', barmode='stack', ybins=dict(size=1)),
+    go.Bar(x=df['COL_ContactLabel'], y=df['ls_description'], marker=dict(color=[colors.get(category,'blue') for category in df['ls_description']])),
+    row=4, col=1
+      )
+    
+    fig.add_trace(
+        go.Histogram(y=df['COL_ContactLabel'], histfunc='count'),
         row=5, col=1
     )
 
-    fig.update_layout(height=800, width=600, showlegend=False)
 
-    # Convert the plotly figure to JSON
-    fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-    # Return the JSON representation of the figure
-    return jsonify({'body': fig_json})
+
+
+ #Pie diagram
+    # count_df = df['ls_description'].value_counts().reset_index()
+    # count_df.columns = ['ls_description', 'count']
+    # df_merged = df.merge(count_df, on='ls_description')
+    # trace1 = go.Pie(df_merged, names='ls_description', values='count',
+    #          title='Percentage of leads',
+    #          hover_data=['ls_description', 'count'],
+    #          labels={'ls_description': 'Lead Status', 'count': 'Count'})
+
+
+    # layout = go.Layout(title="Global Emissions 1990-2011",)
+    # data = [trace1]
+    # fig = go.Figure(data=data, layout=layout)
+    # py.plot(fig, filename='simple-pie-subplot')
+
+
+
+    fig.update_layout(height=5000, width=1200, showlegend=False)
+
+    # Convert figure to HTML string
+    fig_html = fig.to_html(full_html=False)
+
+    # Return the HTML string
+    return fig_html
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
