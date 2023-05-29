@@ -3,6 +3,7 @@ import pyodbc
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.subplots as sp
+import plotly.utils
 import json
 
 server = 'ttplsqleu.database.windows.net'
