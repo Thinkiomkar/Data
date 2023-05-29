@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify
 import pyodbc
 import pandas as pd
 import plotly.graph_objects as go
@@ -16,10 +16,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def main():
-    cmsyscode = request.args.get('cmsyscode')
-
-    if not cmsyscode:
-        return jsonify({'error': 'Missing required parameter: cmsyscode'}), 400
+    cmsyscode = 6  # Set the cmsyscode parameter to 6
 
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
