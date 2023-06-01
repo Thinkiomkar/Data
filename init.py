@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify,request
 import pyodbc
 import pandas as pd
 import plotly.graph_objects as go
@@ -14,7 +14,7 @@ connection_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};D
 app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def main():
-    cmsyscode = 6
+    cmsyscode = int(request.args.get('cmsyscode'))
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
     cursor.execute("EXEC DemoData @cmsyscode=?", (cmsyscode,))  
@@ -22,7 +22,6 @@ def main():
     columns = [column[0] for column in cursor.description]
     result_reshaped = [tuple(row) for row in result]
     df = pd.DataFrame(result_reshaped, columns=columns)
-    json_data = df.to_json(orient='split')
     cursor.close()
     conn.close()
 
@@ -38,12 +37,9 @@ def main():
     )
     fig_dict = fig.to_dict()
     fig_dict['data'][0]['x'] = fig_dict['data'][0]['x'].tolist()
-    response = {
-        'data': json_data,
-        'figure': fig_dict
-    }
+
+    response = {'data': fig_dict}
     return jsonify(response)
 
 if __name__ == '__main__':
     app.run(debug=True)
-
