@@ -1,8 +1,8 @@
-from flask import Flask
+from flask import Flask, jsonify
 import pyodbc
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.offline as py
+import json
 from plotly.tools import make_subplots
 
 server = 'ttplsqleu.database.windows.net'
@@ -22,6 +22,7 @@ def main():
     columns = [column[0] for column in cursor.description]
     result_reshaped = [tuple(row) for row in result]
     df = pd.DataFrame(result_reshaped, columns=columns)
+    json_data = df.to_json(orient='split')
     cursor.close()
     conn.close()
 
@@ -35,9 +36,13 @@ def main():
         height=500, 
         width=1200   
     )
-    fig_html = py.plot(fig, output_type='div', include_plotlyjs='cdn')
-    fig_html = py.plot(fig, output_type='div', include_plotlyjs='cdn', config={'displayModeBar': False})
-    return fig_html 
+    fig_dict = fig.to_dict()
+    fig_dict['data'][0]['x'] = fig_dict['data'][0]['x'].tolist()
+    response = {
+        'data': json_data,
+        'figure': fig_dict
+    }
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.run(debug=True)
