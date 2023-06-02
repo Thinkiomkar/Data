@@ -15,7 +15,7 @@ connection_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};D
 app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def main():
-    cmsyscode =int(input(request.args.get('cmsyscode')))
+    cmsyscode =input(request.args.get('cmsyscode'))
     fromdate=input(request.args.get('fromdate'))
     todate=input(request.args.get('todate'))
     conn = pyodbc.connect(connection_string)
