@@ -15,11 +15,11 @@ app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def main():
     cmsyscode = int(request.args.get('cmsyscode'))
-#     fromdate=input(request.args.get('fromdate'))
-#     todate=input(request.args.get('todate'))
+    fromdate=input(request.args.get('fromdate'))
+    todate=input(request.args.get('todate'))
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
-    cursor.execute("EXEC DemoData @cmsyscode=?", (cmsyscode,))  
+    cursor.execute("EXEC DemoData @cmsyscode= ?,@fromdate= ?,@todate= ?", (cmsyscode,fromdate,todate))
     result = cursor.fetchall() 
     columns = [column[0] for column in cursor.description]
     result_reshaped = [tuple(row) for row in result]
