@@ -5,6 +5,10 @@ import plotly.graph_objects as go
 import json
 from plotly.tools import make_subplots
 
+
+from datetime import datetime
+from datetime import timedelta
+
 server = 'ttplsqleu.database.windows.net'
 database = 'rms_live'
 username = 'ttplsqladmineu'
@@ -24,6 +28,14 @@ def main():
     df = pd.DataFrame(result_reshaped, columns=columns)
     cursor.close()
     conn.close()
+    
+    
+    start = datetime.now()
+    end= (start.today()- timedelta(days=80))
+    To=start.strftime("%d-%b-%Y")
+    From=end.strftime ("%d-%b-%Y")
+    req_data=(df['lm_startdate'] > To) & (df['lm_startdate'] <=From)
+    df = df.loc[req_data]
 
     fig = make_subplots(rows=1, cols=1, vertical_spacing=0.1, subplot_titles=(
         'Leads Status',
