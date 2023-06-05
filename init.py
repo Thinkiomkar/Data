@@ -15,12 +15,12 @@ connection_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};D
 app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def main():
-    # cmsyscode =int(request.args.get('cmsyscode'))
-    # fromdate=input(request.args.get('fromdate'))
-    # todate=input(request.args.get('todate'))
-    cmsyscode=6
-    fromdate='04-May-2023'
-    todate='05-Jun-2023'
+    cmsyscode =int(request.args.get('cmsyscode'))
+    fromdate=str(request.args.get('fromdate'))
+    todate=str(request.args.get('todate'))
+#     cmsyscode=6
+#     fromdate='04-May-2023'
+#     todate='05-Jun-2023'
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
     cursor.execute("EXEC DemoData @cmsyscode= ?,@fromdate= ?,@todate= ?", (cmsyscode,fromdate,todate))  
