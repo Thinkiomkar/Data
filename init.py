@@ -33,7 +33,7 @@ def main():
     cursor.close()
     conn.close()
      
-
+    df.replace({np.NaN:None},inplace=True)
  
     fig = make_subplots(rows=2, cols=2, vertical_spacing=0.1, subplot_titles=(
         'Leads Status','Table1','Lead Source','Table2',
