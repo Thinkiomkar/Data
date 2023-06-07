@@ -1,0 +1,5 @@
+SQL_SERVER = 'ttplsqleu.database.windows.net'
+SQL_DATABASE = 'rms_live'
+SQL_USERNAME = 'ttplsqladmineu'
+SQL_PASSWORD = 'TTPL@123'
+SQL_CONNECTION_STRING = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={SQL_SERVER };DATABASE={SQL_DATABASE };UID={SQL_USERNAME};PWD={SQL_PASSWORD}"
