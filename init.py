@@ -18,9 +18,6 @@ def main():
     cmsyscode =int(request.args.get('cmsyscode'))
     fromdate=str(request.args.get('fromdate'))
     todate=str(request.args.get('todate'))
-#     cmsyscode=6
-#     fromdate='04-May-2023'
-#     todate='05-Jun-2023'
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
     cursor.execute("EXEC DemoData @cmsyscode= ?,@fromdate= ?,@todate= ?", (cmsyscode,fromdate,todate))  
@@ -48,15 +45,6 @@ def main():
     T2.name=''
     T2.showlegend=False
     fig.add_trace(T2,row=1,col=2)
-
-    # fig.set_xticklabels(fig.get_xticklabels(), rotation=0, ha='right')
-    # xaxis_labels = df['COL_ContactLabel'].unique()
-
-    # sources_counts = df['COL_ContactLabel'].value_counts()
-    # top_sources = sources_counts.nlargest(4)
-    # other_sources_count = sources_counts.shape[0] - top_sources.shape[0]
-    # other_sources = sources_counts.nsmallest(other_sources_count).index
-
     xaxis_labels =df['COL_ContactLabel'].unique()
     updated_labels = []
     for label in xaxis_labels:
@@ -88,22 +76,11 @@ def main():
     fig_dict = fig.to_dict()
     fig_dict['data'][0]['x'] = fig_dict['data'][0]['x'].tolist()
     fig_dict['data'][1]['x'] = fig_dict['data'][1]['x'].tolist()
-
-    # fig_html = py.plot(fig, output_type='div', include_plotlyjs='cdn') potly gives whole inbuild header 
-
-    #if we want some specific functions from inbuild header
-    # fig_html = py.plot(fig, output_type='div', include_plotlyjs='cdn', config={'modeBarButtonsToRemove': ['zoom2d','autoscale2d','pan2d','lasso2d','resetScale2d'],'displaylogo':False,'showlegend':False})
-    # return fig_html 
-
     response = {'data': fig_dict}
     return jsonify(response)
 
 @app.route('/home', methods=['GET'])
 def main1():
-#     cmsyscode=6
-#     fromdate='04-May-2023'
-#     todate='05-Jun-2023'
-#     um_user_syscode=11
     cmsyscode =int(request.args.get('cmsyscode'))
     fromdate=str(request.args.get('fromdate'))
     todate=str(request.args.get('todate'))
@@ -118,7 +95,6 @@ def main1():
     cursor.close()
     conn.close()
 
-
     fig= make_subplots(rows=1, cols=2, vertical_spacing=0.1, subplot_titles=(
         'pie diagram'
     ))
@@ -127,9 +103,6 @@ def main1():
     trace2.name = ''
     trace2.showlegend = False
     fig.add_trace(trace2)
-    
-    # fig_html = py.plot(fig, output_type='div', include_plotlyjs='cdn', config={'modeBarButtonsToRemove': ['zoom2d','autoscale2d','pan2d','lasso2d','resetScale2d'],'displaylogo':False,'showlegend':False})
-    # return fig_html 
     
     fig_dict = fig.to_dict()
     fig_dict['data'][0]['x'] = fig_dict['data'][0]['x'].tolist()
