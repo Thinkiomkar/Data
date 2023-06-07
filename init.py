@@ -95,10 +95,10 @@ def main1():
     cursor.close()
     conn.close()
 
-    fig= make_subplots(rows=1, cols=2, vertical_spacing=0.1, subplot_titles=(
+    fig= make_subplots(rows=1, cols=1, vertical_spacing=0.1, subplot_titles=(
         'pie diagram'
     ))
-    top_sources = df['COL_ContactLabel'].value_counts().nlargest(4)
+    top_sources = df['LeadSource'].value_counts().nlargest(4)
     trace2 = go.Pie(labels=top_sources.index, values=top_sources)
     trace2.name = ''
     trace2.showlegend = False
