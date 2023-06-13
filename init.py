@@ -198,5 +198,44 @@ def main2():
     response = {'data': fig_dict}
     return jsonify(response)
 
+
+
+'''
+----------->>>>>>>    Code for  bar chart ( 12/6/2023 )<<<<<---------------------------------------
+
+'''
+
+@app.route('/line', methods=['GET'])
+def main3():
+    cmsyscode =int(request.args.get('cmsyscode'))
+    fromdate=str(request.args.get('fromdate'))
+    todate=str(request.args.get('todate'))
+    conn = pyodbc.connect(connection_string)
+    cursor = conn.cursor() 
+    cursor.execute("EXEC DemoData @cmsyscode= ?,@fromdate= ?,@todate= ?", (cmsyscode,fromdate,todate))   
+    result = cursor.fetchall() 
+    columns = [column[0] for column in cursor.description]
+    result_reshaped = [tuple(row) for row in result]
+    df= pd.DataFrame(result_reshaped, columns=columns)
+    cursor.close()
+    conn.close()
+
+
+    fig = make_subplots(rows=3, cols=1, vertical_spacing=0.15, subplot_titles=(
+        'Lead Status',
+    ))
+
+    counts = df.groupby(['COL_ContactLabel', 'ls_description']).size().reset_index(name='count')
+    fig = px.bar(counts, x='COL_ContactLabel', y='count', color='ls_description', 
+             title=' % Of  Leads Conversions From Sources', barmode='group', text_auto='ls_description')
+    fig.update_traces(textfont_size=18, textangle=0, textposition="outside", cliponaxis=False)
+    fig.update_layout(xaxis=dict(title='Sources'),
+                  yaxis=dict(title='Total'),
+                  legend=dict(title='Lead Status'))
+   
+    data_json=counts.to_json(orient='records')
+    return data_json
+
+
 if __name__ == '__main__':
     app.run(debug=True)
