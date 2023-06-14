@@ -25,9 +25,9 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def main():
-    # cmsyscode =int(request.args.get('cmsyscode'))
-    # fromdate=str(request.args.get('fromdate'))
-    # todate=str(request.args.get('todate'))
+    cmsyscode =int(request.args.get('cmsyscode'))
+    fromdate=str(request.args.get('fromdate'))
+    todate=str(request.args.get('todate'))
     # cmsyscode =6
     # fromdate='5-May-2023'
     # todate='4-Jun-2023'
@@ -130,10 +130,10 @@ def main():
 
 @app.route('/pie1', methods=['GET'])
 def main1():
-    # cmsyscode =int(request.args.get('cmsyscode'))
-    # fromdate=str(request.args.get('fromdate'))
-    # todate=str(request.args.get('todate'))
-    # um_user_syscode=int(request.args.get('um_user_syscode'))
+    cmsyscode =int(request.args.get('cmsyscode'))
+    fromdate=str(request.args.get('fromdate'))
+    todate=str(request.args.get('todate'))
+    um_user_syscode=int(request.args.get('um_user_syscode'))
     # cmsyscode =6
     # fromdate='5-May-2023'
     # todate='4-Jun-2023'
@@ -188,10 +188,10 @@ def main1():
 
 @app.route('/pie2', methods=['GET'])
 def main2():
-    # cmsyscode =int(request.args.get('cmsyscode'))
-    # fromdate=str(request.args.get('fromdate'))
-    # todate=str(request.args.get('todate'))
-    # um_user_syscode=int(request.args.get('um_user_syscode'))
+    cmsyscode =int(request.args.get('cmsyscode'))
+    fromdate=str(request.args.get('fromdate'))
+    todate=str(request.args.get('todate'))
+    um_user_syscode=int(request.args.get('um_user_syscode'))
     # cmsyscode =6
     # fromdate='5-May-2023'
     # todate='4-Jun-2023'
@@ -238,9 +238,9 @@ def main2():
 
 @app.route('/line', methods=['GET'])
 def main3():
-    # cmsyscode =int(request.args.get('cmsyscode'))
-    # fromdate=str(request.args.get('fromdate'))
-    # todate=str(request.args.get('todate'))
+    cmsyscode =int(request.args.get('cmsyscode'))
+    fromdate=str(request.args.get('fromdate'))
+    todate=str(request.args.get('todate'))
     # cmsyscode =6
     # fromdate='5-May-2023'
     # todate='4-Jun-2023'
