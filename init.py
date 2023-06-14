@@ -33,7 +33,7 @@ def main():
     # todate='4-Jun-2023'
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor() 
-    cursor.execute("EXEC DemoData @cmsyscode= ?,@fromdate= ?,@todate= ?", (Parameters.cmsyscode,Parameters.fromdate,Parameters.todate))   
+    cursor.execute("EXEC DemoData @cmsyscode= ?,@fromdate= ?,@todate= ?", (cmsyscode,fromdate,todate))   
     result = cursor.fetchall() 
     columns = [column[0] for column in cursor.description]
     result_reshaped = [tuple(row) for row in result]
@@ -140,8 +140,8 @@ def main1():
     # um_user_syscode=11
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
-    cursor.execute("EXEC LeadStatus_Graph_PY  @CM_syscode= ?,@fromdate= ?,@todate= ?,@um_user_syscode= ?", (Parameters.cmsyscode,Parameters.fromdate,Parameters.todate,Parameters.um_user_syscode))   
-    cursor.execute('''SELECT * FROM rms_live.TempLeadGraphTablePY WHERE  Um_UserSyscode=? ''', Parameters.um_user_syscode)
+    cursor.execute("EXEC LeadStatus_Graph_PY  @CM_syscode= ?,@fromdate= ?,@todate= ?,@um_user_syscode= ?", (cmsyscode,fromdate,todate,um_user_syscode))   
+    cursor.execute('''SELECT * FROM rms_live.TempLeadGraphTablePY WHERE  Um_UserSyscode=? ''', um_user_syscode)
     result1 = cursor.fetchall() 
     conn.commit()
     columns = [column[0] for column in cursor.description]
@@ -198,8 +198,8 @@ def main2():
     # um_user_syscode=11
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
-    cursor.execute("EXEC LeadSourceGridOnLeadGraph_PY @CM_syscode= ?,@fromdate= ?,@todate= ?,@um_user_syscode= ?", (Parameters.cmsyscode,Parameters.fromdate,Parameters.todate,Parameters.um_user_syscode))   
-    cursor.execute('''SELECT * FROM rms_live.LeadSourcePY WHERE  um_user_syscode=? ''', Parameters.um_user_syscode)
+    cursor.execute("EXEC LeadSourceGridOnLeadGraph_PY @CM_syscode= ?,@fromdate= ?,@todate= ?,@um_user_syscode= ?", (cmsyscode,fromdate,todate,um_user_syscode))   
+    cursor.execute('''SELECT * FROM rms_live.LeadSourcePY WHERE  um_user_syscode=? ''', um_user_syscode)
     result3 = cursor.fetchall()
     conn.commit()
     columns = [column[0] for column in cursor.description]
@@ -246,7 +246,7 @@ def main3():
     # todate='4-Jun-2023'
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor() 
-    cursor.execute("EXEC DemoData @cmsyscode= ?,@fromdate= ?,@todate= ?", (Parameters.cmsyscode,Parameters.fromdate,Parameters.todate))   
+    cursor.execute("EXEC DemoData @cmsyscode= ?,@fromdate= ?,@todate= ?", (cmsyscode,fromdate,todate))   
     result = cursor.fetchall() 
     columns = [column[0] for column in cursor.description]
     result_reshaped = [tuple(row) for row in result]
@@ -299,10 +299,10 @@ def main3():
    
     # fig_html= py.plot(fig, output_type='div', include_plotlyjs='cdn', config={'modeBarButtonsToRemove': ['zoom2d','autoscale2d','pan2d','lasso2d','resetScale2d'],'displaylogo':False,'showlegend':False})
     # return fig_html 
-    
-    
-    fig_json=fig.to_json()
+     fig_json=fig.to_json()
     response={'data':fig_json}
     return jsonify(response)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
