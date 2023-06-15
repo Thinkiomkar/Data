@@ -67,8 +67,7 @@ def main():
     fig_dict['data'][0]['x'] = fig_dict['data'][0]['x'].tolist()
     fig_dict['data'][1]['x'] = fig_dict['data'][1]['x'].tolist()
     response = {'data': fig_dict,'config': {'modeBarButtonsToRemove': ['zoom2d', 'autoscale2d', 'pan2d', 'lasso2d', 'resetScale2d'], 'displaylogo': False}}
-    response_json = json.dumps(response)
-    return jsonify(response_json)
+    return jsonify(response)
 
 @app.route('/line', methods=['GET'])
 def main3():
@@ -96,8 +95,7 @@ def main3():
                   legend=dict(title='Lead Status'))  
     fig_json=fig.to_json()
     response = {'data': fig_json,'config': {'modeBarButtonsToRemove': ['zoom2d', 'autoscale2d', 'pan2d', 'lasso2d', 'resetScale2d'], 'displaylogo': False}}
-    response_json = json.dumps(response)
-    return jsonify(response_json)
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.run(debug=True)
