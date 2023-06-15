@@ -53,7 +53,7 @@ def main():
         else:
             updated_labels.append(label)          
     fig.update_layout(
-        height=600, width=1350,#h=400 
+        height=400, width=1350,#h=400 
         margin=dict(l=50, r=50, t=50, b=50),
             plot_bgcolor='white',
             # paper_bgcolor='white', 
@@ -70,7 +70,7 @@ def main():
     )  
     ) 
     fig.update_layout(
-    modebar={'remove': ['zoom2d', 'autoscale2d', 'pan2d', 'lasso2d', 'resetScale2d','logo','ModeBar'],
+    modebar={'remove': ['zoom2d', 'autoscale2d', 'pan2d', 'lasso2d', 'resetScale2d','displaylogo','ModeBar'],
               },
     showlegend=False,
 )
@@ -107,9 +107,9 @@ def main3():
                 title=dict(text="<br>% Of  Leads Conversions From Sources</br>")
                 )
     fig.update_layout(
-    modebar={'remove': ['zoom2d', 'autoscale2d', 'pan2d', 'lasso2d', 'resetScale2d','logo','ModeBar'],
+    modebar={'remove': ['zoom2d', 'autoscale2d', 'pan2d', 'lasso2d', 'resetScale2d','displaylogo','ModeBar'],
               },
-    showlegend=False,
+    showlegend=True,
     ) 
     fig_json = fig.to_json()
     response = {'data': fig_json}
