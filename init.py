@@ -104,15 +104,14 @@ def main3():
     fig.update_layout(xaxis=dict(title='Sources'),
                   yaxis=dict(title='Total'),
                 legend=dict(title='Lead Status'),
-                title=dict(text="<br>% Of  Leads Conversions From Sources</br>")
+                title=dict(text="<br>% Of  Leads Conversions From Sources</br>"),
+                 height=600, width=1350,     
                 )
-    fig.update_layout(
-    modebar={'remove': ['zoom2d', 'autoscale2d', 'pan2d', 'lasso2d', 'resetScale2d','displaylogo','ModeBar'],
-              },
-    showlegend=True,
-    ) 
-    fig_json = fig.to_json()
-    response = {'data': fig_json}
+    fig.update_layout(   showlegend=True,    
+ )
+    fig_html = fig.to_html(full_html=False)
+    fig_html = fig_html.replace('<head>', '<head><style>.plotlyjsmodebar{display:none!important;}</style>')
+    response = {'data': fig_html}
     return jsonify(response)
 
 if __name__ == '__main__':
