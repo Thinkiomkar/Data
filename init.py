@@ -8,9 +8,21 @@ import plotly.graph_objects as go
 import plotly.express as px
 import config
 import Parameters
+# from flask_cors import CORS
+
+# app = Flask(__name__)
+# CORS(app) 
 
 connection_string = config.SQL_CONNECTION_STRING
+
 app = Flask(__name__)
+
+
+'''
+----------->>>>>>>    Code for Histogram  (6/6/2023)  <<<<<---------------------------------------
+
+'''
+
 @app.route('/', methods=['GET'])
 def main():
     cmsyscode =str(request.args.get('cmsyscode'))
@@ -19,13 +31,20 @@ def main():
     um_user_syscode=str(request.args.get('um_user_syscode'))
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor() 
-    cursor.execute("EXEC DemoData @cmsyscode= ?,@fromdate= ?,@todate= ?,@um_user_syscode=?", (cmsyscode,fromdate,todate,um_user_syscode))   
+    cursor.execute("EXEC PyGraphData_status @cmsyscode= ?,@fromdate= ?,@todate= ?,@um_user_syscode=?", (cmsyscode,fromdate,todate,um_user_syscode))   
+   
     result = cursor.fetchall() 
     columns = [column[0] for column in cursor.description]
     result_reshaped = [tuple(row) for row in result]
     df= pd.DataFrame(result_reshaped, columns=columns)
+    NEXT = cursor.nextset()
+    result2 = cursor.fetchall()
+    columns2 = [column[0] for column in cursor.description]
+    result_reshaped2 = [tuple(row) for row in result2]
+    df2= pd.DataFrame(result_reshaped2, columns=columns2)
     cursor.close()
     conn.close()
+
 
 
     fig = make_subplots(rows=1, cols=2, vertical_spacing=0.15, subplot_titles=(
@@ -40,12 +59,12 @@ def main():
         width=1330 ,
         margin=dict(l=50, r=50, t=100, b=100) 
     )
-    T2 = go.Histogram(x=df['COL_ContactLabel'],marker_color='#8BC34A')
+    T2 = go.Histogram(x=df2['COL_ContactLabel'],marker_color='#8BC34A')
     T2.name=''
     # T2.showlegend=False
     fig.add_trace(T2,row=1,col=2)
 
-    xaxis_labels =df['COL_ContactLabel'].unique()
+    xaxis_labels =df2['COL_ContactLabel'].unique()
     updated_labels = []
     for label in xaxis_labels:
         if ' ' in label:
@@ -71,18 +90,29 @@ def main():
             automargin=True,  
     )  
     )
-    fig.update_annotations(font_size=16)   
-    fig.update_layout(
+    # fig.update_annotations(font_size=20,)
+    # fig.update_annotations(config={'modeBarButtonsToRemove': ['zoom2d','autoscale2d','pan2d','lasso2d','resetScale2d'],'displaylogo':False})  #increase title size of plot
+   
+    fig.update_annotations(font_size=16)
+
+    # fig_html = py.plot(fig, output_type='div')  #potly gives whole inbuild header 
+
+    #if we want some specific functions from inbuild header
+ 
+
+    
+#     fig.update_layout(
     modebar={'remove': ['zoom2d', 'autoscale2d', 'pan2d', 'lasso2d', 'resetScale2d','logo','ModeBar'],
               },
     showlegend=False,
-    )
+)
     
     fig_dict = fig.to_dict()
     fig_dict['data'][0]['x'] = fig_dict['data'][0]['x'].tolist()
     fig_dict['data'][1]['x'] = fig_dict['data'][1]['x'].tolist()
     response = {'data': fig_dict}
     return jsonify(response)
+
 
 @app.route('/line', methods=['GET'])
 def main3():
@@ -99,6 +129,10 @@ def main3():
     df= pd.DataFrame(result_reshaped, columns=columns)
     cursor.close()
     conn.close()
+
+
+    # fig = make_subplots(rows=1, cols=1, vertical_spacing=0.15, subplot_titles=(
+    # ))
 
     color_map = {
    'Lost Lead': 'rgb(255, 0, 0)',    
@@ -127,17 +161,20 @@ def main3():
                  height=600, width=1350,
                  font_size=14
                 )
+ 
+
+
     fig.update_layout(
     modebar={'remove': ['zoom2d', 'autoscale2d', 'pan2d', 'lasso2d', 'resetScale2d','logo','ModeBar']},
     showlegend=True,    
-     )
+)
     fig_json = fig.to_json()
     response = {'data': fig_json}
     return jsonify(response)
 
-
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 
