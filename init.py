@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 import config
+import json
 
 connection_string = config.SQL_CONNECTION_STRING
 app = Flask(__name__)
@@ -54,10 +55,6 @@ def main():
             tickfont=dict(size=12),
             automargin=True,))   
     fig.update_annotations(font_size=16)
-
-    # fig_html= py.plot(fig, output_type='div', include_plotlyjs='cdn', config={'modeBarButtonsToRemove': ['zoom2d','autoscale2d','pan2d','lasso2d','resetScale2d'],'displaylogo':False})
-    # return fig_html 
-
     fig.update_layout(
     modebar={'remove': ['zoom2d', 'autoscale2d', 'pan2d', 'lasso2d', 'resetScale2d','logo','ModeBar'],
               },showlegend=False,)   
@@ -66,6 +63,7 @@ def main():
     fig_dict['data'][1]['x'] = fig_dict['data'][1]['x'].tolist()
     response = {'data': fig_dict}
     return jsonify(response)
+
 
 @app.route('/line', methods=['GET'])
 def main3():
@@ -95,6 +93,7 @@ def main3():
     'WIP': '#FF9800', 
     'Junk Lead' :'gray',
     'Contact in Future':' #BA68C8',
+    'Other':'gray',
     }
     df['color'] = df['ls_description'].map(color_map)
     counts =result.groupby(['COL_ContactLabel', 'ls_description']).size().reset_index(name='count')
@@ -108,18 +107,16 @@ def main3():
                 plot_bgcolor='white',
                  height=600, width=1350,
                  font_size=14)    
-    # fig_html= py.plot(fig, output_type='div', include_plotlyjs='cdn', config={'modeBarButtonsToRemove': ['zoom2d','autoscale2d','pan2d','lasso2d','resetScale2d'],'displaylogo':False,'showlegend':False,'displaymodeBar':False,})
-    # return fig_html 
-
     fig.update_layout(
     modebar={'remove': ['zoom2d', 'autoscale2d', 'pan2d', 'lasso2d', 'resetScale2d','logo','ModeBar']},
     showlegend=True,)
     fig_json = fig.to_json()
-    response = {'data': fig_json}
-    return jsonify(response)
+    return fig_json
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
 
 
 
