@@ -111,8 +111,9 @@ def main3():
     modebar={'remove': ['zoom2d', 'autoscale2d', 'pan2d', 'lasso2d', 'resetScale2d','logo','ModeBar']},
     showlegend=True,)
     fig_json = fig.to_json()
-    return fig_json
-
+    response = {'data': fig_json}
+    return jsonify(response)
+    
 if __name__ == '__main__':
     app.run(debug=True)
 
