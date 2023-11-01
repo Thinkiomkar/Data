@@ -7,7 +7,7 @@ import plotly.express as px
 import config
 import json
 
-connection_string = config.SQL_CONNECTION_STRING
+
 app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def main():
