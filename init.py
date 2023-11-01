@@ -15,6 +15,11 @@ def main():
     fromdate=str(request.args.get('fromdate'))
     todate=str(request.args.get('todate'))
     um_user_syscode=str(request.args.get('um_user_syscode'))
+    status=str(request.args.get('code'))
+    if status==1 or status is None:
+       connection_string = config.SQL_CONNECTION_STRING 
+    else: 
+     connection_string = config.SQL_CONNECTION_STRING2
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor() 
     cursor.execute("EXEC PyGraphData_status @cmsyscode= ?,@fromdate= ?,@todate= ?,@um_user_syscode=?", (cmsyscode,fromdate,todate,um_user_syscode))   
@@ -71,6 +76,11 @@ def main3():
     fromdate=str(request.args.get('fromdate'))
     todate=str(request.args.get('todate'))
     um_user_syscode=str(request.args.get('um_user_syscode'))
+    status=str(request.args.get('code'))
+    if status==1 or status is None:
+       connection_string = config.SQL_CONNECTION_STRING 
+    else: 
+     connection_string = config.SQL_CONNECTION_STRING2
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor() 
     cursor.execute("EXEC PyGraphData_status  @cmsyscode= ?,@fromdate= ?,@todate= ?,@um_user_syscode=?", (cmsyscode,fromdate,todate,um_user_syscode))   
@@ -116,6 +126,8 @@ def main3():
     
 if __name__ == '__main__':
     app.run(debug=True)
+
+
 
 
 
